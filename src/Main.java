@@ -1,5 +1,13 @@
+import order.EOrderStatus;
+import order.Order;
+import payment.EPaymentMethod;
+import payment.FPaymentMethod;
+import payment.IPaymentMethod;
+
 public class Main {
     public static void main(String[] args) {
+
+        // -- ORDER -- \\
 
         Order order_1 = new Order.OrderBuilder()
                 .addProduct("un site internet", 20000)
@@ -15,5 +23,13 @@ public class Main {
 
         order_1.display();
         order_2.display();
+
+        // -- PAYMENT -- \\
+
+        IPaymentMethod payment_1 = FPaymentMethod.createMeansOfPayment(EPaymentMethod.PAYPAL);
+        IPaymentMethod payment_2 = FPaymentMethod.createMeansOfPayment(EPaymentMethod.CREDIT_CARD);
+
+        payment_1.pay(200);
+        payment_2.pay(200);
     }
 }

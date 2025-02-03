@@ -1,3 +1,5 @@
+package order;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" +
+        return "order.Order{" +
                 "id=" + id +
                 ", products=" + products +
                 ", totalPrice=" + totalPrice +
@@ -53,13 +55,13 @@ public class Order {
 
         public String getStatusToString(EOrderStatus status) {
             switch (status) {
-                case WAITING:
+                case EOrderStatus.WAITING:
                     return "En attende";
-                case IN_PROGRESS:
+                case EOrderStatus.IN_PROGRESS:
                     return "En cours";
-                case DELIVERED:
+                case EOrderStatus.DELIVERED:
                     return "Livrée";
-                case CANCELLED:
+                case EOrderStatus.CANCELLED:
                     return "Annulée";
                 default:
                     return "???";
