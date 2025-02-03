@@ -1,3 +1,5 @@
+import notify.Customer;
+import notify.OrderObserver;
 import order.EOrderStatus;
 import order.Order;
 import payment.EPaymentMethod;
@@ -31,5 +33,17 @@ public class Main {
 
         payment_1.pay(200);
         payment_2.pay(200);
+
+        // -- NOTIFY -- \\
+
+        OrderObserver order_observer = new OrderObserver();
+        Customer client_1 = new Customer("Client 1");
+        Customer client_2 = new Customer("Client 2");
+
+        order_observer.addObserver(client_1);
+        order_observer.addObserver(client_2);
+
+        order_observer.notify("Votre commande a bien été reçu !");
+        order_observer.notify("Votre commande est en cours de préparation !");
     }
 }
