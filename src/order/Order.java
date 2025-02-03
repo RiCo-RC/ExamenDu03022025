@@ -32,7 +32,7 @@ public class Order {
         System.out.println(this.toString());
     }
 
-    public static class OrderBuilder {
+    public static class OrderBuilder implements IOrder {
         private static int idAutoIncrement = 1;
         private int id;
         private List<String> products = new ArrayList<>();
