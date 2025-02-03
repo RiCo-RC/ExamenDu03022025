@@ -80,6 +80,10 @@ public class Product {
             return this;
         }
 
+        public double getPrice() {
+            return this.price;
+        }
+
         public Product build() {
             return new Product(this);
         }

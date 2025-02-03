@@ -1,3 +1,4 @@
+import manager.*;
 import notify.Customer;
 import notify.OrderObserver;
 import order.EOrderStatus;
@@ -12,6 +13,7 @@ public class Main {
 
         // -- INIT -- \\
 
+        // --> Liste des produits
         Product macbookAirM2 = new Product.ProductBuilder()
                 .setName("Apple MackBook Air M2")
                 .setPrice(1299)
@@ -75,27 +77,31 @@ public class Main {
                 .setQuantity(10)
                 .build();
 
+        // --> Liste des payements
         IPaymentMethod paypal = FPaymentMethod.createMeansOfPayment(EPaymentMethod.PAYPAL);
         IPaymentMethod creditCards = FPaymentMethod.createMeansOfPayment(EPaymentMethod.CREDIT_CARD);
         IPaymentMethod cryptocurrency = FPaymentMethod.createMeansOfPayment(EPaymentMethod.CRYPTOCURRENCY);
 
+        // --> Liste des clients
         Customer rico = new Customer("RiCo", 4000);
-        Customer lip = new Customer("Lip", 98654);
+        Customer lip = new Customer("Lip", 10);
 
-        Order order_rico = new Order.OrderBuilder()
+        // --> Liste des commandes
+        Order rico_order = new Order.OrderBuilder()
                 .setCustomer(rico)
-                .addProduct(ps5)
-                .addProduct(xboxSeriesX)
-                .addProduct(hostingCloud)
+                .addProduct(ps5, 1)
+                .addProduct(xboxSeriesX, 1)
+                .addProduct(hostingCloud, 1)
                 .setStatus(EOrderStatus.WAITING)
                 .build();
-        Order order_lip = new Order.OrderBuilder()
+        Order lip_order = new Order.OrderBuilder()
                 .setCustomer(lip)
-                .addProduct(samsungGalaxyS23)
-                .addProduct(airPodsPro2)
+                .addProduct(samsungGalaxyS23, 1)
+                .addProduct(airPodsPro2, 1)
                 .setStatus(EOrderStatus.WAITING)
                 .build();
 
+        // --> Pour la notification
         OrderObserver general_observer = new OrderObserver();
         OrderObserver rico_observer = new OrderObserver();
         OrderObserver lip_observer = new OrderObserver();
@@ -106,6 +112,15 @@ public class Main {
         rico_observer.addObserver(rico);
 
         lip_observer.addObserver(lip);
+
+        // --> Pour gérer la responsabilité
+        IOrderValidation stockCheck = new StockCheckRequest();
+        IOrderValidation paymentCheck = new PaymentCheckRequest();
+        IOrderValidation orderDispatch = new OrderDispatchRequest();
+
+        stockCheck.setNext(paymentCheck);
+        paymentCheck.setNext(orderDispatch);
+
 
         // -- DISPLAY -- \\
 
@@ -150,8 +165,10 @@ public class Main {
         System.out.println("#---------- LISTE DES COMMANDES ----------#");
         System.out.print("\n");
 
-        order_rico.display();
-        order_lip.display();
+        rico_order.display();
+        lip_order.display();
+
+        //System.out.println(order_rico.getProducts());
 
         System.out.print("\n");
         System.out.println("#---------- LISTE DES NOTIFICATIONS ----------#");
@@ -161,5 +178,24 @@ public class Main {
         rico_observer.notify("Votre commande est en cours de préparation !");
         lip_observer.notify("Votre commande est en attende de produits disponible !");
 
+        System.out.print("\n");
+        System.out.println("#---------- LISTE DES RESPONSABILITES ----------#");
+        System.out.print("\n");
+
+        ServiceOrder rico_requestStock = new ServiceOrder(ETypeRequest.STOCK_CHECK, rico, rico_order);
+        //ServiceOrder rico_requestPayment = new ServiceOrder(ETypeRequest.PAYMENT_CHECK, rico, rico_order);
+        //ServiceOrder rico_requestDispatch = new ServiceOrder(ETypeRequest.ORDER_DISPATCH, rico, rico_order);
+        stockCheck.handleOrder(rico_requestStock);
+        //paymentCheck.handleOrder(rico_requestPayment);
+        //orderDispatch.handleOrder(rico_requestDispatch);
+        rico_requestStock.display();
+
+        ServiceOrder lip_requestStock = new ServiceOrder(ETypeRequest.STOCK_CHECK, lip, lip_order);
+        //ServiceOrder lip_requestPayment = new ServiceOrder(ETypeRequest.PAYMENT_CHECK, lip, lip_order);
+        //ServiceOrder lip_requestDispatch = new ServiceOrder(ETypeRequest.ORDER_DISPATCH, lip, lip_order);
+        stockCheck.handleOrder(lip_requestStock);
+        //paymentCheck.handleOrder(lip_requestPayment);
+        //orderDispatch.handleOrder(lip_requestDispatch);
+        lip_requestStock.display();
     }
 }

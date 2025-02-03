@@ -3,12 +3,12 @@ package order;
 import notify.Customer;
 import product.Product;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Order {
     private int id;
-    private List<Product> products;
+    private Map<Product, Integer> products;
     private double totalPrice;
     private String status;
     private Customer customer;
@@ -21,8 +21,16 @@ public class Order {
         this.customer = builder.customer;
     }
 
-    public List<Product> getProducts() {
+    public Map<Product, Integer> getProducts() {
         return this.products;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public double getTotalPrice() {
+        return this.totalPrice;
     }
 
     public Order display() {
@@ -35,7 +43,8 @@ public class Order {
         String numberProducts = (this.products.size() == 1) ? "produit" : "produits";
         return "--> Commande : " +
                 "n°" + this.id +
-                ", par " + this.customer.getName() +                ", " + numberProducts + "= " + this.products +
+                ", par " + this.customer.getName() +
+                ", " + numberProducts + "= " + this.products +
                 ", prix total=" + this.totalPrice +
                 ", statut='" + this.status + "'.";
     }
@@ -43,7 +52,7 @@ public class Order {
     public static class OrderBuilder implements IOrder {
         private static int idAutoIncrement = 1;
         private int id;
-        private final List<Product> products = new ArrayList<>();
+        private final Map<Product, Integer>  products = new HashMap<>();
         private double totalPrice;
         private String status = EOrderStatus.WAITING.toString();
         private Customer customer;
@@ -57,9 +66,11 @@ public class Order {
             return this;
         }
 
-        public OrderBuilder addProduct(Product product) {
-            this.products.add(product);
-            this.totalPrice += product.getPrice();
+        public OrderBuilder addProduct(Product product, int quantity) {
+            if (quantity > 0 && quantity <= product.getQuantity()) {
+                this.products.put(product, quantity);
+                this.totalPrice += product.getPrice() * quantity;
+            }
             return this;
         }
 
