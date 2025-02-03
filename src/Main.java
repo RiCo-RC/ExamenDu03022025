@@ -1,3 +1,5 @@
+import log.STransactionLogger;
+import log.TransactionLogger;
 import manager.*;
 import notify.Customer;
 import notify.OrderObserver;
@@ -121,11 +123,14 @@ public class Main {
         stockCheck.setNext(paymentCheck);
         paymentCheck.setNext(orderDispatch);
 
+        // --> Pour le logger
+        TransactionLogger logger = STransactionLogger.getInstance();
+        TransactionLogger anotherLogger = STransactionLogger.getInstance();
 
         // -- DISPLAY -- \\
 
         System.out.print("\n");
-        System.out.println("#---------- LISTE DES PRODUITS ----------#");
+        System.out.println("#---------- PRODUITS ----------#");
         System.out.print("\n");
 
         macbookAirM2.display();
@@ -143,7 +148,7 @@ public class Main {
         cybersecurity.display();
 
         System.out.print("\n");
-        System.out.println("#---------- LISTE DES METHODES DE PAYEMENTS ----------#");
+        System.out.println("#---------- METHODES DE PAYEMENTS ----------#");
         System.out.print("\n");
 
         creditCards.display();
@@ -155,14 +160,14 @@ public class Main {
         creditCards.pay(200);
 
         System.out.print("\n");
-        System.out.println("#---------- LISTE DES CLIENTS ----------#");
+        System.out.println("#---------- CLIENTS ----------#");
         System.out.print("\n");
 
         rico.display();
         lip.display();
 
         System.out.print("\n");
-        System.out.println("#---------- LISTE DES COMMANDES ----------#");
+        System.out.println("#---------- COMMANDES ----------#");
         System.out.print("\n");
 
         rico_order.display();
@@ -171,7 +176,7 @@ public class Main {
         //System.out.println(order_rico.getProducts());
 
         System.out.print("\n");
-        System.out.println("#---------- LISTE DES NOTIFICATIONS ----------#");
+        System.out.println("#---------- NOTIFICATIONS ----------#");
         System.out.print("\n");
 
         general_observer.notify("Votre commande a bien été reçu !");
@@ -179,7 +184,7 @@ public class Main {
         lip_observer.notify("Votre commande est en attende de produits disponible !");
 
         System.out.print("\n");
-        System.out.println("#---------- LISTE DES RESPONSABILITES ----------#");
+        System.out.println("#---------- RESPONSABILITES ----------#");
         System.out.print("\n");
 
         ServiceOrder rico_requestStock = new ServiceOrder(ETypeRequest.STOCK_CHECK, rico, rico_order);
@@ -197,5 +202,12 @@ public class Main {
         //paymentCheck.handleOrder(lip_requestPayment);
         //orderDispatch.handleOrder(lip_requestDispatch);
         lip_requestStock.display();
+
+        System.out.print("\n");
+        System.out.println("#---------- LOG ----------#");
+        System.out.print("\n");
+
+        logger.log("Paiement effectué.");
+        anotherLogger.log("Annulation de la commande.");
     }
 }
