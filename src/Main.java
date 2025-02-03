@@ -17,7 +17,7 @@ public class Main {
         Order order_2 = new Order.OrderBuilder()
                 .addProduct("un serveur", 10000)
                 .addProduct("un ordinateur", 2500)
-                .addProduct("Une télé", 1200)
+                .addProduct("une télé", 1200)
                 .setStatus(EOrderStatus.DELIVERED)
                 .build();
 

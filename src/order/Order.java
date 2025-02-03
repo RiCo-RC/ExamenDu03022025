@@ -19,11 +19,12 @@ public class Order {
 
     @Override
     public String toString() {
-        return "order.Order{" +
-                "id=" + id +
-                ", products=" + products +
-                ", totalPrice=" + totalPrice +
-                ", status='" + status + '\'' +
+        String numberProducts = (this.products.size() == 1) ? "produit" : "produits";
+        return "--> Commande : " +
+                "n°" + this.id +
+                ", " + numberProducts +"=" + this.products +
+                ", prix total=" + this.totalPrice +
+                ", statut='" + this.status + '\'' +
                 '}';
     }
 
