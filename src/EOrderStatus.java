@@ -1,0 +1,3 @@
+public enum EOrderStatus {
+    WAITING, IN_PROGRESS, DELIVERED, CANCELLED
+}
